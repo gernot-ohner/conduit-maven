@@ -1,0 +1,5 @@
+CREATE TABLE tags
+(
+    id UUID PRIMARY KEY,
+    tag VARCHAR NOT NULL
+);
