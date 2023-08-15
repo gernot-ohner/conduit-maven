@@ -1,5 +1,6 @@
 
-INSERT INTO tags(id, tag) VALUES (gen_random_uuid(), 'foo');
+INSERT INTO tags(id, tag) VALUES (gen_random_uuid(), 'foo')
+ON CONFLICT DO NOTHING;
 
 INSERT INTO users(id, email, token, username, created_at, updated_at, bio, image)
 VALUES (gen_random_uuid(),
