@@ -71,6 +71,9 @@ public class UserController {
 
         final var principalEmail = getPrincipalEmail(request);
 
+        final var followerCount = userService.getFollowerCount(principalEmail);
+        log.error("Follower count: {}", followerCount);
+
         return userService
             .getUserByEmail(principalEmail)
             .map(UserModel::toUser)

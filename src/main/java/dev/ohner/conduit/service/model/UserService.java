@@ -1,26 +1,24 @@
 package dev.ohner.conduit.service.model;
 
+import dev.ohner.conduit.exception.UnprocessableContentException;
 import dev.ohner.conduit.model.UpdateUser;
+import dev.ohner.conduit.repository.UserFollowerRelationRepository;
 import dev.ohner.conduit.repository.UserRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
 
     final UserRepository userRepository;
+    final UserFollowerRelationRepository userFollowerRelationRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserFollowerRelationRepository userFollowerRelationRepository) {
         this.userRepository = userRepository;
-    }
-
-    public Optional<UserModel> getUserById(UUID id) {
-        return userRepository.findById(id)
-            .map(UserModel::fromEntity);
+        this.userFollowerRelationRepository = userFollowerRelationRepository;
     }
 
     public Optional<UserModel> getUserByEmail(EmailRecord email) {
@@ -36,7 +34,6 @@ public class UserService {
         }
 
         final var currentUser = maybeCurrentUser.get();
-
 
         final var updatedUser = new UserModel(
             currentUser.id(),
@@ -55,6 +52,13 @@ public class UserService {
 
         final var savedUser = userRepository.save(updatedUser.toEntity());
         return Optional.of(savedUser).map(UserModel::fromEntity);
+    }
+
+    public int getFollowerCount(EmailRecord emailRecord) throws UnprocessableContentException {
+        final var user = userRepository.findByEmail(emailRecord.value())
+            .orElseThrow(() -> new UnprocessableContentException("User not found"));
+
+        return userFollowerRelationRepository.findFollowersByUserId(user.id()).size();
     }
 }
 
