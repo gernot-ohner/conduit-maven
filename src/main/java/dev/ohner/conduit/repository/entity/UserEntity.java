@@ -1,11 +1,10 @@
 package dev.ohner.conduit.repository.entity;
 
-import dev.ohner.conduit.service.model.*;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Table("users")
@@ -16,7 +15,9 @@ public record UserEntity(
     String email,
     String token,
     String username,
-    Optional<String> bio,
-    Optional<String> image
+    @Nullable
+    String bio,
+    @Nullable
+    String image
 ) {
 }

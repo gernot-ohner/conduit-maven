@@ -21,8 +21,8 @@ public record UserModel(
             new EmailRecord(entity.email()),
             new Token(entity.token()),
             new Username(entity.username()),
-            entity.bio().map(Bio::new),
-            entity.image().map(ImageReference::new)
+            Optional.ofNullable(entity.bio()).map(Bio::new),
+            Optional.ofNullable(entity.image()).map(ImageReference::new)
         );
     }
 
@@ -32,8 +32,8 @@ public record UserModel(
             emailRecord().value(),
             token().value(),
             username().value(),
-            bio().map(Bio::value),
-            image().map(ImageReference::value)
+            bio().map(Bio::value).orElse(null),
+            image().map(ImageReference::value).orElse(null)
         );
     }
 

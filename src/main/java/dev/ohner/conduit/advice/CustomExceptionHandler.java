@@ -15,7 +15,7 @@ import java.util.List;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<Void> handleUnauthorized(UnauthorizedException ex) {
+    public ResponseEntity<Void> handleUnauthorized(UnauthorizedException ignoredEx) {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
