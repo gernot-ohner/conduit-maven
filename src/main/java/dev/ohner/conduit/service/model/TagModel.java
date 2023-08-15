@@ -13,6 +13,10 @@ public record TagModel(
         return new TagModel(entity.id(), entity.tag());
     }
 
+    public TagEntity toEntity() {
+        return new TagEntity(null, tag);
+    }
+
     public static TagModel from(String tag) {
         return new TagModel(UUID.randomUUID(), tag);
     }

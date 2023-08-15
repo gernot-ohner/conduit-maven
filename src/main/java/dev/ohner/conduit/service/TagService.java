@@ -21,4 +21,8 @@ public class TagService {
             .map(TagModel::fromEntity)
             .toList();
     }
+
+    public TagModel createTag(TagModel tag) {
+        return TagModel.fromEntity(tagRepository.save(tag.toEntity()));
+    }
 }
