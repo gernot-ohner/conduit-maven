@@ -1,5 +1,6 @@
 package dev.ohner.conduit.controller;
 
+import dev.ohner.conduit.exception.UnauthorizedException;
 import dev.ohner.conduit.exception.UnprocessableContentException;
 import dev.ohner.conduit.model.GenericErrorModel;
 import dev.ohner.conduit.model.GetProfileByUsername200Response;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+
+import static dev.ohner.conduit.controller.Utils.getPrincipalEmail;
 
 @RestController
 public class ProfileController {
@@ -63,8 +66,13 @@ public class ProfileController {
         final WebRequest request,
         @Parameter(name = "username", description = "Username of the profile you want to follow", required = true, in = ParameterIn.PATH)
         @PathVariable("username") String username
-    ) {
-        return null;
+    ) throws UnauthorizedException, UnprocessableContentException {
+
+        return profileService.followUserByUsername(username, getPrincipalEmail(request))
+            .map(dev.ohner.conduit.service.model.ProfileModel::toProfile)
+            .map(GetProfileByUsername200Response::new)
+            .map(ResponseEntity::ok)
+            .orElseThrow(() -> new UnprocessableContentException("Could not transform profile to response"));
     }
 
     /**
@@ -147,7 +155,11 @@ public class ProfileController {
         final WebRequest request,
         @Parameter(name = "username", description = "Username of the profile you want to unfollow", required = true, in = ParameterIn.PATH)
         @PathVariable("username") String username
-    ) {
-        return null;
+    ) throws UnauthorizedException, UnprocessableContentException {
+        return profileService.unfollowUserByUsername(username, getPrincipalEmail(request))
+            .map(dev.ohner.conduit.service.model.ProfileModel::toProfile)
+            .map(GetProfileByUsername200Response::new)
+            .map(ResponseEntity::ok)
+            .orElseThrow(() -> new UnprocessableContentException("Could not transform profile to response"));
     }
 }

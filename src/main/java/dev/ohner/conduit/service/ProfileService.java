@@ -2,11 +2,13 @@ package dev.ohner.conduit.service;
 
 import dev.ohner.conduit.repository.UserFollowerRelationRepository;
 import dev.ohner.conduit.repository.UserRepository;
+import dev.ohner.conduit.repository.entity.UserFollowerRelationEntity;
 import dev.ohner.conduit.service.model.EmailRecord;
 import dev.ohner.conduit.service.model.ProfileModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -42,7 +44,45 @@ public class ProfileService {
         return Optional.of(ProfileModel.fromUserEntity(user, follows));
     }
 
-    public Optional<ProfileModel> followUserByUsername(String username, EmailRecord requestingUser) {
-        return null;
+    public Optional<ProfileModel> followUserByUsername(String username, EmailRecord requestingEmail) {
+
+        final var userToFollow = userRepository.findByUsername(username);
+        if (userToFollow.isEmpty()) {
+            return Optional.empty();
+        }
+        final var requestingUser = userRepository.findByEmail(requestingEmail.value());
+        if (requestingUser.isEmpty()) {
+            return Optional.empty();
+        }
+
+        userFollowerRelationRepository.save(
+            new UserFollowerRelationEntity(
+                null,
+                userToFollow.get().id(),
+                requestingUser.get().id(),
+                OffsetDateTime.now()
+            )
+        );
+
+        return Optional.of(ProfileModel.fromUserEntity(userToFollow.get(), true));
+    }
+
+    public Optional<ProfileModel> unfollowUserByUsername(String username, EmailRecord requestingEmail) {
+
+        final var userToFollow = userRepository.findByUsername(username);
+        if (userToFollow.isEmpty()) {
+            return Optional.empty();
+        }
+        final var requestingUser = userRepository.findByEmail(requestingEmail.value());
+        if (requestingUser.isEmpty()) {
+            return Optional.empty();
+        }
+
+        userFollowerRelationRepository.deleteAllByUserIdAndFollowerId(
+            userToFollow.get().id(),
+            requestingUser.get().id()
+        );
+
+        return Optional.of(ProfileModel.fromUserEntity(userToFollow.get(), false));
     }
 }

@@ -2,7 +2,7 @@ spring:
   application:
     name: conduit
   datasource:
-    url: localhost:5432/conduit
+    url: jdbc:postgresql://localhost:5432/conduit
     username: user
     password: conduit
   docker:
@@ -15,6 +15,7 @@ spring:
 logging:
   level:
     root: info
+    org.springframework.jdbc: debug
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
 
