@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS tags
 (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tag VARCHAR NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS users
 (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR NOT NULL,
     token VARCHAR NOT NULL,
     email VARCHAR NOT NULL UNIQUE ,
