@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: localhost:5432/conduit
+    username: user
+    password: conduit
+  docker:
+    compose:
+      lifecycle-management: start_only
+  sql:
+    init:
+      mode: always
+
+logging:
+  level:
+    root: info

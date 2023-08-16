@@ -22,3 +22,4 @@ INSERT INTO user_follower_relation(id, user_id, follower_id)
 VALUES (gen_random_uuid(),
         (SELECT id FROM users WHERE email = 'gernot.ohner@gmail.com'),
         (SELECT id FROM users WHERE email = 'gernot.ohner@protonmail.com'))
+ON CONFLICT DO NOTHING;
