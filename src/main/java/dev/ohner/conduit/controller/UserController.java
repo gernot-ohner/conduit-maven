@@ -5,9 +5,8 @@ import dev.ohner.conduit.exception.UnprocessableContentException;
 import dev.ohner.conduit.model.GenericErrorModel;
 import dev.ohner.conduit.model.Login200Response;
 import dev.ohner.conduit.model.UpdateCurrentUserRequest;
-import dev.ohner.conduit.service.model.EmailRecord;
 import dev.ohner.conduit.service.model.UserModel;
-import dev.ohner.conduit.service.model.UserService;
+import dev.ohner.conduit.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -69,10 +68,7 @@ public class UserController {
         final WebRequest request
     ) throws UnauthorizedException, UnprocessableContentException {
 
-        final var principalEmail = getPrincipalEmail(request);
-
-        final var followerCount = userService.getFollowerCount(principalEmail);
-        log.error("Follower count: {}", followerCount);
+        final var principalEmail = Utils.getPrincipalEmail(request);
 
         return userService
             .getUserByEmail(principalEmail)
@@ -121,7 +117,7 @@ public class UserController {
         @Valid @RequestBody UpdateCurrentUserRequest body
     ) throws UnauthorizedException, UnprocessableContentException {
 
-        final var principal = getPrincipalEmail(request);
+        final var principal = Utils.getPrincipalEmail(request);
 
         return userService
             .updateUserByEmail(principal, body.getUser())
@@ -131,13 +127,4 @@ public class UserController {
             .orElseThrow(() -> new UnprocessableContentException("No user found"));
     }
 
-    private static EmailRecord getPrincipalEmail(WebRequest request) throws UnauthorizedException {
-        log.info("Handling request: {}", request);
-        final var principal = request.getUserPrincipal();
-        if (principal == null) {
-            throw new UnauthorizedException("No principal found");
-        }
-
-        return new EmailRecord(principal.getName());
-    }
 }

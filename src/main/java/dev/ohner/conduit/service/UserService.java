@@ -1,9 +1,9 @@
-package dev.ohner.conduit.service.model;
+package dev.ohner.conduit.service;
 
-import dev.ohner.conduit.exception.UnprocessableContentException;
 import dev.ohner.conduit.model.UpdateUser;
 import dev.ohner.conduit.repository.UserFollowerRelationRepository;
 import dev.ohner.conduit.repository.UserRepository;
+import dev.ohner.conduit.service.model.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
@@ -54,11 +54,6 @@ public class UserService {
         return Optional.of(savedUser).map(UserModel::fromEntity);
     }
 
-    public int getFollowerCount(EmailRecord emailRecord) throws UnprocessableContentException {
-        final var user = userRepository.findByEmail(emailRecord.value())
-            .orElseThrow(() -> new UnprocessableContentException("User not found"));
 
-        return userFollowerRelationRepository.findFollowersByUserId(user.id()).size();
-    }
 }
 

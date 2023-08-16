@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface UserFollowerRelationRepository extends ListCrudRepository<UserFollowerRelationEntity, UUID> {
 
-    public List<UserFollowerRelationEntity> findFollowersByUserId(UUID userId);
+    boolean existsByUserIdAndFollowerId(UUID userId, UUID followerId);
 }
