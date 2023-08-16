@@ -14,8 +14,8 @@ public record ProfileModel(
     public static ProfileModel fromUserEntity(UserEntity user, boolean b) {
         return new ProfileModel(
             new Username(user.username()),
-            Bio.fromNullable(user.bio()),
-            ImageReference.fromNullable(user.image()),
+            Bio.ofNullable(user.bio()),
+            ImageReference.ofNullable(user.image()),
             b
         );
     }

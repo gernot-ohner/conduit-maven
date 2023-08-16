@@ -43,11 +43,11 @@ public class UserService {
                 ? new Username(currentUser.username())
                 : new Username(user.getUsername()),
             user.getBio() == null
-                ? Optional.of(new Bio(currentUser.bio()))
-                : Optional.ofNullable(user.getBio()).map(Bio::new),
+                ? Bio.ofNullable(currentUser.bio())
+                : Bio.ofNullable(user.getBio()),
             user.getImage() == null
-                ? Optional.of(new ImageReference(currentUser.image()))
-                : Optional.ofNullable(user.getImage()).map(ImageReference::new)
+                ? ImageReference.ofNullable(currentUser.image())
+                : ImageReference.ofNullable(user.getImage())
         );
 
         final var savedUser = userRepository.save(updatedUser.toEntity());

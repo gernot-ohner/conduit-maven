@@ -5,7 +5,8 @@ import jakarta.annotation.Nullable;
 import java.util.Optional;
 
 public record Bio(String value) {
-    public static Optional<Bio> fromNullable(@Nullable String bio) {
+    public static Optional<Bio> ofNullable(@Nullable String bio) {
         return Optional.ofNullable(bio).map(Bio::new);
     }
+
 }
