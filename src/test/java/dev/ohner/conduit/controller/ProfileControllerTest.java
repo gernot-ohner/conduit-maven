@@ -35,7 +35,7 @@ class ProfileControllerTest {
 
     @Container
     @ServiceConnection
-    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:13")
+    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest")
         .withDatabaseName("conduit")
         .withUsername("conduit")
         .withPassword("test");
