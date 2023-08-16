@@ -18,8 +18,7 @@ VALUES (gen_random_uuid(),
         'I am a software engineer')
 ON CONFLICT DO NOTHING;
 
-INSERT INTO user_follower_relation(id, user_id, follower_id)
-VALUES (gen_random_uuid(),
-        (SELECT id FROM users WHERE email = 'gernot.ohner@gmail.com'),
+INSERT INTO user_follower_relation(user_id, follower_id)
+VALUES ((SELECT id FROM users WHERE email = 'gernot.ohner@gmail.com'),
         (SELECT id FROM users WHERE email = 'gernot.ohner@protonmail.com'))
 ON CONFLICT DO NOTHING;

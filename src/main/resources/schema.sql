@@ -18,11 +18,11 @@ CREATE TABLE IF NOT EXISTS users
 
 CREATE TABLE IF NOT EXISTS user_follower_relation
 (
-    id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
-    follower_id UUID NOT NULL UNIQUE,
+    follower_id UUID NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (user_id, follower_id),
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (follower_id) REFERENCES users (id)
 );
