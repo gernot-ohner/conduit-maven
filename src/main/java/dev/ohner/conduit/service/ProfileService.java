@@ -34,20 +34,15 @@ public class ProfileService {
         }
         final var user = maybeUser.get();
 
-        final boolean follows;
-        if (requestingUserEmail.isEmpty()) {
-            follows = false;
-        } else {
-            final var email = requestingUserEmail.get().value();
-            final var requestingUser = userRepository.findByEmail(email);
-            if (requestingUser.isEmpty()) {
-                follows = false;
-            } else {
-                final var requestingUserId = requestingUser.get().id();
-                follows = userFollowerRelationRepository.existsByUserIdAndFollowerId(user.id(), requestingUserId);
-            }
-        }
+        final var follows = requestingUserEmail
+            .flatMap(er -> userRepository.findByEmail(er.value()))
+            .map(u -> userFollowerRelationRepository.existsByUserIdAndFollowerId(user.id(), u.id()))
+            .orElse(false);
 
         return Optional.of(ProfileModel.fromUserEntity(user, follows));
+    }
+
+    public Optional<ProfileModel> followUserByUsername(String username, EmailRecord requestingUser) {
+        return null;
     }
 }
