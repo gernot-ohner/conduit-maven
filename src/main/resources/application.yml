@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: conduit
   datasource:
     url: localhost:5432/conduit
     username: user
@@ -13,3 +15,17 @@ spring:
 logging:
   level:
     root: info
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+management:
+  tracing:
+    sampling:
+      probability: 1
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
