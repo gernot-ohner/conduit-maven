@@ -15,7 +15,35 @@ Authorization: Basic Z2Vybm90Lm9obmVyQGdtYWlsLmNvbTpwYXNzd29yZA==
 
 {
   "user": {
-    "username": "arminiusX",
-    "bio": "I'm a software engineer"
+    "username": "gernot",
+    "bio": "I'm a Spring Expert"
   }
+}
+
+###
+GET http://localhost:8080/profiles/gary
+Accept: application/json
+Authorization: Basic Z2Vybm90Lm9obmVyQGdtYWlsLmNvbTpwYXNzd29yZA==
+
+###
+POST http://localhost:8080/profiles/gary/follow
+Accept: application/json
+Authorization: Basic Z2Vybm90Lm9obmVyQGdtYWlsLmNvbTpwYXNzd29yZA==
+
+###
+DELETE http://localhost:8080/profiles/gary/follow
+Accept: application/json
+Authorization: Basic Z2Vybm90Lm9obmVyQGdtYWlsLmNvbTpwYXNzd29yZA==
+
+###
+POST http://localhost:8080/users
+Accept: application/json
+Content-Type: application/json
+
+{
+    "user": {
+        "username": "gary",
+        "email": "gary@gmail.com",
+        "password": "password"
+    }
 }
