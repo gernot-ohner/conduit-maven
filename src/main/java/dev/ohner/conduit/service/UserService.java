@@ -1,8 +1,10 @@
 package dev.ohner.conduit.service;
 
+import dev.ohner.conduit.model.NewUser;
 import dev.ohner.conduit.model.UpdateUser;
 import dev.ohner.conduit.repository.UserFollowerRelationRepository;
 import dev.ohner.conduit.repository.UserRepository;
+import dev.ohner.conduit.repository.entity.UserEntity;
 import dev.ohner.conduit.service.model.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -37,8 +39,12 @@ public class UserService {
 
         final var updatedUser = new UserModel(
             currentUser.id(),
-            emailRecord,
-            new Token(currentUser.token()), // TODO generate new token
+            user.getEmail() == null
+                ? emailRecord
+                : new EmailRecord(user.getEmail()),
+            user.getPassword() == null
+                ? Token.fromTokenString(currentUser.token())
+                : Token.fromPassword(user.getPassword()),
             user.getUsername() == null
                 ? new Username(currentUser.username())
                 : new Username(user.getUsername()),
@@ -55,5 +61,19 @@ public class UserService {
     }
 
 
+    public UserModel createUser(NewUser user) {
+
+        final var newUserEntity = new UserEntity(
+            null,
+            new EmailRecord(user.getEmail()).value(),
+            Token.fromPassword(user.getPassword()).value(),
+            user.getUsername(),
+            null,
+            null
+        );
+
+        final var savedUser = userRepository.save(newUserEntity);
+        return UserModel.fromEntity(savedUser);
+    }
 }
 

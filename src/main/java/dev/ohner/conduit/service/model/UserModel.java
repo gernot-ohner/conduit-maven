@@ -19,7 +19,7 @@ public record UserModel(
         return new UserModel(
             entity.id(),
             new EmailRecord(entity.email()),
-            new Token(entity.token()),
+            Token.fromTokenString(entity.token()),
             new Username(entity.username()),
             Bio.ofNullable(entity.bio()),
             ImageReference.ofNullable(entity.image())
