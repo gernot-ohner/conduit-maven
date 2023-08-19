@@ -6,14 +6,15 @@ CREATE TABLE IF NOT EXISTS tags
 
 CREATE TABLE IF NOT EXISTS users
 (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID NOT NULL DEFAULT gen_random_uuid(),
     username VARCHAR NOT NULL,
     token VARCHAR NOT NULL,
     email VARCHAR NOT NULL UNIQUE ,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     bio VARCHAR,
-    image VARCHAR
+    image VARCHAR,
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS user_follower_relation
