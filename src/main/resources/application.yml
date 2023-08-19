@@ -11,11 +11,17 @@ spring:
   sql:
     init:
       mode: always
+  h2:
+    console:
+      enabled: false
+
 
 logging:
   level:
     root: info
-    org.springframework.jdbc: debug
+    org.springframework:
+      jdbc: debug
+      security: debug
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
 
