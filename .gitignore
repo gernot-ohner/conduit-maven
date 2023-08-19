@@ -30,3 +30,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Security
+/src/main/resources/certs/private.pem
+/src/main/resources/certs/public.pem
+/src/main/resources/certs/keypair.pem
+
+### outfiles
+/out/production/resources/data.sql
+/out/production/resources/schema.sql
