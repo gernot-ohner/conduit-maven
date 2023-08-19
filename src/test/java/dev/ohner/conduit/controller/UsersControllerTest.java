@@ -7,13 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -23,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Testcontainers
 @Transactional
-class ProfileControllerTest {
+class UsersControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -47,7 +49,7 @@ class ProfileControllerTest {
             "test_user",
             null,
             null
-            );
+        );
         final var callerUser = new UserEntity(
             null,
             "calleruser@test.com",
@@ -61,35 +63,32 @@ class ProfileControllerTest {
     }
 
     @Test
-    @WithMockUser("calleruser@test.com")
-    void followAndUnfollow() throws Exception {
+    void createUser() throws Exception {
 
-        final var testUser = "test_user";
+        final var email = "user.%s@gmail.com".formatted(UUID.randomUUID());
+        final var userJSON = """
+            {
+                "user": {
+                    "email": "%s",
+                    "username": "test_user",
+                    "password": "password"
+                }
+            }
+            """.formatted(email);
 
-        // 1. Retrieve the profile (user should not be followed yet)
-        mockMvc.perform(get("/profiles/" + testUser))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.profile.following").value(false));
+        // 1. Create "user1"
+        mockMvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(userJSON)
+            )
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.user.email").value(email));
 
-        // 2. Follow the user
-        mockMvc.perform(post("/profiles/" + testUser + "/follow"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.profile.following").value(true));
-
-        // 3. Retrieve the profile (user should be followed now)
-        mockMvc.perform(get("/profiles/" + testUser))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.profile.following").value(true));
-
-        // 4. Unfollow the user
-        mockMvc.perform(delete("/profiles/" + testUser + "/follow"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.profile.following").value(false));
-
-        // 5. Retrieve the profile (user should not be followed anymore)
-        mockMvc.perform(get("/profiles/" + testUser))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.profile.following").value(false));
+        // 2. login as "user1"
+        // 3. get the current user
+        // 4. Update the current user
+        // 5. As "user1", make a secured request
     }
 
 }
