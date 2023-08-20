@@ -39,7 +39,8 @@ class ProfileServiceTest {
             "email",
             "password",
             "bio",
-            null
+            null,
+            "ROLE_USER"
         );
         when(userRepository.findByUsername("username")).thenReturn(Optional.of(userEntity));
 
@@ -64,7 +65,8 @@ class ProfileServiceTest {
             "email",
             "password",
             "bio",
-            null
+            null,
+            "ROLE_USER"
         );
         when(userRepository.findByUsername("username")).thenReturn(Optional.of(userEntity));
         when(userRepository.findByEmail(requestingUserEmail.value()))
@@ -74,7 +76,8 @@ class ProfileServiceTest {
                 "{noop}password",
                 requestingUserEmail.value(),
                 null,
-                null
+                null,
+                "ROLE_USER"
             )));
         when(userFollowerRelationRepository.existsByUserIdAndFollowerId(userId, followerId))
             .thenReturn(false);
@@ -101,7 +104,8 @@ class ProfileServiceTest {
             "email",
             "password",
             "bio",
-            null
+            null,
+            "ROLE_USER"
         );
 
         when(userRepository.findByUsername("username")).thenReturn(Optional.of(userEntity));
@@ -112,7 +116,8 @@ class ProfileServiceTest {
                 "{noop}password",
                 requestingUserEmail.value(),
                 null,
-                null
+                null,
+                "ROLE_USER"
             )));
         when(userFollowerRelationRepository.existsByUserIdAndFollowerId(userId, followerId))
             .thenReturn(true);

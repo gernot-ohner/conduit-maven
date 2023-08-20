@@ -18,6 +18,7 @@ public record UserEntity(
     @Nullable
     String bio,
     @Nullable
-    String image
+    String image,
+    String roles
 ) {
 }

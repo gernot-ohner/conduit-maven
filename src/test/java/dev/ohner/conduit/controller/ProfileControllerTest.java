@@ -46,7 +46,8 @@ class ProfileControllerTest {
             "{noop}password",
             "test_user",
             null,
-            null
+            null,
+            "ROLE_USER"
             );
         final var callerUser = new UserEntity(
             null,
@@ -54,7 +55,8 @@ class ProfileControllerTest {
             "{noop}password",
             "caller_user",
             null,
-            null
+            null,
+            "ROLE_USER"
         );
         userRepository.save(testUser);
         userRepository.save(callerUser);

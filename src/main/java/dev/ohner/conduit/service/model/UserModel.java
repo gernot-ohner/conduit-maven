@@ -12,17 +12,19 @@ public record UserModel(
     Token token,
     Username username,
     Optional<Bio> bio,
-    Optional<ImageReference> image
+    Optional<ImageReference> image,
+    Roles roles
 ) {
 
     public static UserModel fromEntity(UserEntity entity) {
         return new UserModel(
             entity.id(),
             new EmailRecord(entity.email()),
-            Token.fromTokenString(entity.token()),
+            new Token(entity.token()),
             new Username(entity.username()),
             Bio.ofNullable(entity.bio()),
-            ImageReference.ofNullable(entity.image())
+            ImageReference.ofNullable(entity.image()),
+            new Roles(entity.roles())
         );
     }
 
@@ -33,7 +35,8 @@ public record UserModel(
             token().value(),
             username().value(),
             bio().map(Bio::value).orElse(null),
-            image().map(ImageReference::value).orElse(null)
+            image().map(ImageReference::value).orElse(null),
+            roles().value()
         );
     }
 
